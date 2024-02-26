@@ -5,7 +5,7 @@ By : Benhard Simanullang
 ## About Application
 Embark on a personalized running journey with RunTracker, your all-in-one application for logging and enhancing your running activities. This app empowers you to effortlessly record your runs, and set ambitious goals over time.
 
-RunTracker is constructed with the Ratpack library for the back-end, featuring multiple endpoints that users can leverage for their individual development (for more details, click here). Utilizing Firebase for the database, users are required to set up their own accounts for database usage. To facilitate swift deployment, the application also provides a straightforward user interface, allowing users to promptly utilize it upon execution.
+RunTracker is constructed with the Ratpack library for the back-end, featuring multiple endpoints that users can leverage for their individual development ([for more details, click here](#api-documentation)). Utilizing Firebase for the database, users are required to set up their own accounts for database usage. To facilitate swift deployment, the application also provides a straightforward user interface, allowing users to promptly utilize it upon execution.
 
 ### Key Features of RunTracker:
 
@@ -37,13 +37,13 @@ Track your running goals efficiently in real-time, helping you stay motivated an
 2. select your project
 
 <p align="center">
-   <img src="img_1.png" alt="img_1.png">
+   <img src="img/img_1.png" alt="img_1.png">
 </p>
 
 3. go to build, choose firestore database
 
 <p align="center">
-  <img src="img_2.png" alt="img_2.png">
+  <img src="img/img_2.png" alt="img_2.png">
 </p>
 
 4. click create database
@@ -51,14 +51,14 @@ Track your running goals efficiently in real-time, helping you stay motivated an
 6. go to user and premission
 
 <p align="center">
-  <img src="img_3.png" alt="img_3.png">
+  <img src="img/img_3.png" alt="img_3.png">
 </p>
 
 7. go to service account
 8. click the Generate new private key
 
 <p align="center">
-  <img src="img_4.png" alt="img_4.png">
+  <img src="img/img_4.png" alt="img/img_4.png">
 </p>
 
 #### seting up the RunTracker application
@@ -88,8 +88,11 @@ gradle wrapper
 8. when you see the application running on Localhost:5050 you can access the app via browser by typing it to access the simple user interface Utilizing the REST API endpoint.
 
 <p align="center">
-  <img src="img.png" alt="img.png">
+  <img src="img/img.png" alt="img.png">
 </p>
+
+### [API Documentation](#api-documentation)
+
 
     
 
