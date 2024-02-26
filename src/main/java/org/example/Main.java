@@ -34,7 +34,7 @@ public class Main {
                 )
                 .handlers(chain -> chain
                         .all(new CorsHandler())
-                        .get("index.html", ctx -> renderHtml(ctx, file("index.html")))
+                        .get("", ctx -> renderHtml(ctx, file("index.html")))
 
                         // get activities and goal data
                         .get("allactivity", ActivityController::getAllActivity)
@@ -79,35 +79,3 @@ public class Main {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    private void runServer() throws Exception {
-//        RatpackServer.start(server -> server
-//                .serverConfig(ServerConfig.builder()
-//                        .port(5050) // Define the port here
-//                        .build())
-//                .registry(Guice.registry(bindingsSpec -> bindingsSpec.module(DatabaseModule.class)))
-//                .handlers(chain -> chain
-//                        // get All the Activity Log
-//                        .get("allactivity", ActivityController::listActivity)
-//                        .post("addactivity", ActivityController::addActivity)
-//                )
-//        );
-//    }
