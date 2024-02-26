@@ -1,0 +1,27 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Compiled class files
+*.class
+
+# Logs
+*.log
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA files
+*.ipr
+*.iws
+*.iws.*
+*.iwsr
+
+# Visual Studio Code
+.vscode/

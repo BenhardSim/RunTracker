@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Activity Tracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+
+<div class="container mt-5 shadow"
+     style="background-color:#35374B ;color: white; padding: 30px;border-radius: 10px;">
+    <h1 class="mt-3 text-center">- Running Tracker -</h1>
+</div>
+
+<div class="container mt-5 shadow" style="background-color: white; padding: 30px;border-radius: 10px">
+    <ul class="nav nav-tabs" id="myTabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="activities-tab" data-toggle="tab" href="#activities">Activities</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary">Summary</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="goals-tab" data-toggle="tab" href="#goals">Goals</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content mt-2">
+        <!-- Activities Tab -->
+
+
+        <div class="tab-pane fade show active mb-3" id="activities">
+            <h4 class="mt-3">Activities</h4>
+
+            <form id="activityForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputDate">Date</label>
+                        <input name="date" type="date" class="form-control" id="inputDate" placeholder="Date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputDuration">Duration</label>
+                        <input name="duration" type="number" class="form-control" id="inputDuration"
+                               placeholder="Duration">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group  col-md-6">
+                        <label for="inputCalories">Calories</label>
+                        <input name="calories" type="number" class="form-control" id="inputCalories"
+                               placeholder="Calories">
+                    </div>
+
+                    <div class="form-group  col-md-6">
+                        <label for="inputDistance">Distance</label>
+                        <input name="distance" type="number" class="form-control" id="inputDistance"
+                               placeholder="Distance">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputSteps">Steps</label>
+                        <input name="steps" type="number" class="form-control" id="inputSteps" placeholder="Steps">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputHBeat">Avarage HeartBeat</label>
+                        <input name="avgHeartBeat" type="text" class="form-control" id="inputHBeat"
+                               placeholder="HeartBeat">
+                    </div>
+                </div>
+
+                <button type="submit" id="addAccBtn" class="btn btn-primary">Add Activity</button>
+            </form>
+
+            <form id="activityFormEdit" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="inputDate">Activity ID</label>
+                        <input type="number" class="form-control" id="inputActivityIdEdit" placeholder="ID"
+                               disabled>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputDate">Date</label>
+                        <input name="date" type="date" class="form-control" id="inputDateEdit" placeholder="Date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputDuration">Duration</label>
+                        <input name="duration" type="number" class="form-control" id="inputDurationEdit"
+                               placeholder="Duration">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group  col-md-6">
+                        <label for="inputCalories">Calories</label>
+                        <input name="calories" type="number" class="form-control" id="inputCaloriesEdit"
+                               placeholder="Calories">
+                    </div>
+
+                    <div class="form-group  col-md-6">
+                        <label for="inputDistance">Distance</label>
+                        <input name="distance" type="number" class="form-control" id="inputDistanceEdit"
+                               placeholder="Distance">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputSteps">Steps</label>
+                        <input name="steps" type="number" class="form-control" id="inputStepsEdit"
+                               placeholder="Steps">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputHBeat">Avarage HeartBeat</label>
+                        <input name="avgHeartBeat" type="text" class="form-control" id="inputHBeatEdit"
+                               placeholder="HeartBeat">
+                    </div>
+                </div>
+                <button type="button" id="backAddAcc" class="btn btn-primary">Back To Add Activity</button>
+                <button type="submit" id="EditAccBtn" class="btn btn-warning">Edit Activity</button>
+            </form>
+
+            <br>
+
+            <div id="errorMessage" class="alert alert-danger" style="display: none;">Halooo</div>
+            <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+
+
+            <br><br>
+            <table class="table text-center table-hover" id="activities">
+                <thead>
+                <tr>
+                    <!-- Your table headers here -->
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Duration</th>
+                    <th>Calories Burn</th>
+                    <th>Distance</th>
+                    <th>Steps</th>
+                    <th>Avarage HeartBeat</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="activityTableBody">
+                <!-- Data will be populated here using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary Tab -->
+        <div class="tab-pane fade" id="summary">
+            <h4 class="mt-3">Summary</h4>
+            <!-- Your summary content here -->
+
+            <br>
+            <table class="table table-hover" id="activities">
+                <tbody>
+                <tr>
+                    <td class="col-md-3 font-weight-bold bg-light-gray">Total Calories</td>
+                    <td id="totalCalories">-</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3 font-weight-bold bg-light-gray">Total Distance</td>
+                    <td id="totalDistance">-</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3 font-weight-bold bg-light-gray">Total Steps</td>
+                    <td id="totalStep">-</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3 font-weight-bold bg-light-gray">Total Duration</td>
+                    <td id="totalDuration">-</td>
+                </tr>
+                <tr>
+                    <td class="col-md-3 font-weight-bold bg-light-gray">Avarage HeartBeat</td>
+                    <td id="AvgHBeat">-</td>
+                </tr>
+                <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+
+        </div>
+
+        <!-- Goals Tab -->
+        <div class="tab-pane fade" id="goals">
+            <h4 class="mt-3">Goals</h4>
+
+            <form id="goalForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputDate">Deadline</label>
+                        <input name="deadLine" type="date" class="form-control" id="deadLine" placeholder="Date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputDuration">Target Calories</label>
+                        <input name="totalCal" type="number" class="form-control" id="inputDuration"
+                               placeholder="Put your target here...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group  col-md-12">
+                        <label for="inputCalories">Description</label>
+                        <textarea name="desc" type="number" class="form-control" id="inputCalories"
+                                  placeholder="Tell your story here.."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Goal</button>
+            </form>
+
+            <form id="goalFormEdit" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputDate">Goal ID</label>
+                        <input name="goalId" type="number" class="form-control" id="goalIdEdit" placeholder="ID"
+                               disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputDate">Status</label>
+                        <input name="goalId" type="text" class="form-control" id="goalStatusEdit" placeholder="ID"
+                               disabled>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputDate">Deadline</label>
+                        <input name="deadLine" type="date" class="form-control" id="goalDeadLineEdit"
+                               placeholder="Date">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputDuration">Target Calories</label>
+                        <input name="totalCal" type="number" class="form-control" id="goalTargetCaloriesEdit"
+                               placeholder="Put your target here...">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group  col-md-12">
+                        <label for="inputCalories">Description</label>
+                        <textarea name="desc" type="number" class="form-control" id="goalDescEdit"
+                                  placeholder="Tell your story here.."></textarea>
+                    </div>
+                </div>
+
+                <button type="button" id="backAddGoal" class="btn btn-primary">Back To Add Goal</button>
+                <button type="submit" id="EditGoalBtn" class="btn btn-warning">Edit Goal</button>
+            </form>
+
+            <br>
+
+            <div id="errorMessageGoal" class="alert alert-danger" style="display: none;">Halooo</div>
+            <div id="successMessageGoal" class="alert alert-success" style="display: none;"></div>
+
+            <br><br>
+
+            <table class="table table-hover text-center">
+                <thead>
+                <tr>
+                    <!-- Your table headers here -->
+                    <th>ID</th>
+                    <th>Deadline</th>
+                    <th>Target Calories</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="goalTableBody">
+                <!-- Data will be populated here using JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br><br>
+<div id="loadingIndicator" class="text-center mt-3" style="display: none;">
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <p>Loading...</p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@2.0.0/build/global/luxon.min.js"></script>
+<script>
+        $(document).ready(async function () {
+            console.log("Start...");
+
+            async function getActivities() {
+                try {
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/allactivity'); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    updateActivityTable(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+            }
+
+            async function getGoal() {
+                try {
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/allgoals'
+                    ); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    updateGoalTable(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+            }
+
+            function updateActivityTable(activities) {
+                var tableBody = $('#activityTableBody');
+                tableBody.empty();
+
+                activities.forEach(function (activity) {
+
+                    var deleteButtonId = 'deleteBtn_' + activity.activityId;
+
+                    // Append rows to the table with activity details
+                    tableBody.append('<tr data-activityId="' + activity.activityId + '">' +
+                        '<td>' + activity.activityId + '</td>' +
+                        '<td>' + activity.date + '</td>' +
+                        '<td>' + activity.duration + '</td>' +
+                        '<td>' + activity.calories + '</td>' +
+                        '<td>' + activity.distance + '</td>' +
+                        '<td>' + activity.steps + '</td>' +
+                        '<td>' + activity.avgHeartBeat + '</td>' +
+                        '<td> <button id="' + activity.activityId +
+                        '" type="button" class="btn btn-warning edit-btn">Edit</button> <button id="' +
+                        activity.activityId +
+                        '" type="button" class="btn btn-danger delete-btn">Delete</button> </td>' +
+                        '</tr>');
+                });
+
+            }
+
+            function fillActivityForm(activities) {
+                $("#inputActivityIdEdit").val(activities.activityId);
+                $("#inputDateEdit").val(activities.date);
+                $("#inputDurationEdit").val(activities.duration);
+                $("#inputCaloriesEdit").val(activities.calories);
+                $("#inputDistanceEdit").val(activities.distance);
+                $("#inputStepsEdit").val(activities.steps);
+                $("#inputHBeatEdit").val(activities.avgHeartBeat);
+            }
+
+            function fillGoalForm(goals) {
+                $("#goalIdEdit").val(goals.goalId);
+                $("#goalStatusEdit").val(goals.status);
+                $("#goalDeadLineEdit").val(goals.deadLine);
+                $("#goalTargetCaloriesEdit").val(goals.totalCal);
+                $("#goalDescEdit").val(goals.desc);
+            }
+
+            function updateGoalTable(goals) {
+                var tableBody = $('#goalTableBody');
+                tableBody.empty();
+
+                goals.forEach(function (goal) {
+
+                    var deleteButtonId = 'deleteBtn_' + goal.activityId;
+
+                    var buttonAction =
+                        '<td> <button id="' + goal.goalId +
+                        '" type="button" class="btn btn-warning edit-btn">Edit</button> <button id="' +
+                        goal.goalId +
+                        '" type="button" class="btn btn-danger delete-btn">Delete</button> </td>' +
+                        '</tr>'
+
+                    var statusField = '<td style="color:#FFD23F"><b>' + goal.status + '</b></td>';
+
+                    if (goal.status == "Finish") {
+                        buttonAction =
+                            '<td><button id="' +
+                            goal.goalId +
+                            '" type="button" class="btn btn-danger delete-btn">Delete</button> </td>' +
+                            '</tr>'
+
+                        statusField = '<td style="color:#9BCF53"><b>' + goal.status + '</b></td>';
+                    }
+
+                    if (goal.status == "DeadLine Exceeded") {
+                        statusField = '<td style="color:#FF004D"><b>' + goal.status + '</b></td>';
+                    }
+
+                    // Append rows to the table with activity details
+                    tableBody.append('<tr data-activityId="' + goal.goalId + '">' +
+                        '<td>' + goal.goalId + '</td>' +
+                        '<td>' + goal.deadLine + '</td>' +
+                        '<td>' + goal.totalCal + '</td>' +
+                        statusField +
+                        '<td>' + goal.desc + '</td>' +
+                        buttonAction
+                    );
+                });
+            }
+
+            function updateSummaryTable(summary) {
+                var totalCalories = $("#totalCalories");
+                totalCalories.html(summary.totalCalories.toString() + " Cal")
+                var totalDuration = $("#totalDuration");
+                totalDuration.html(summary.totalDuration.toString() + " Minutes");
+                var totalStep = $("#totalStep");
+                totalStep.html(summary.totalStep.toString() + " Steps");
+                var totalDistance = $("#totalDistance");
+                totalDistance.html(summary.totalDistance.toString() + " Meter");
+                var AvgHBeat = $("#AvgHBeat");
+                AvgHBeat.html(summary.AvgHBeat.toString() + " BPM");
+            }
+
+            function generateRandomId() {
+                // Generate a random number between 10000 and 99999
+                return Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+            }
+
+            $('#activityForm').submit(async function (event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                var formDataObject = {};
+                new URLSearchParams(formData).forEach((value, key) => {
+                    if (key == "date") {
+
+                        var dateObject = luxon.DateTime.fromISO(value);
+
+                        // Format the date as "YYYY-DD-MM"
+                        var formattedDate = dateObject.toFormat('yyyy-dd-MM');
+
+                        formDataObject[key] = formattedDate;
+                    } else {
+                        formDataObject[key] = parseInt(value, 10);
+                    }
+                });
+
+                formDataObject["activityId"] = generateRandomId();
+                jsonData = JSON.stringify(formDataObject);
+
+                console.log(jsonData);
+                try {
+                    await $.ajax({
+                        url: 'http://localhost:5050/addactivity',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        dataType: "json",
+                        data: jsonData,
+                        success: function (response) {
+                            // Show success message
+                            $("#successMessage").text(
+                                "Activity submitted successfully!");
+                            $("#successMessage").show();
+
+                            // Hide success message after 5 seconds
+                            setTimeout(function () {
+                                $("#successMessage").hide();
+                            }, 5000);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle the error by displaying the error message
+                            $("#errorMessage").text("An error occurred: " + jqXHR
+                                .responseText);
+                            $("#errorMessage").show();
+
+                            // Hide the error message after 5 seconds
+                            setTimeout(function () {
+                                $("#errorMessage").hide();
+                            }, 5000);
+                        }
+                    });
+                    // After adding, fetch and update the table
+                    $('#activityForm')[0].reset();
+                    await getActivities();
+                } catch (error) {
+                    console.error('Error adding activity:', error);
+                }
+            });
+
+            $('#activityFormEdit').submit(async function (event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                var formDataObject = {};
+                new URLSearchParams(formData).forEach((value, key) => {
+                    if (key == "date") {
+                        formDataObject[key] = value.toString();
+                    } else {
+                        formDataObject[key] = parseInt(value, 10);
+                    }
+                });
+
+                jsonData = JSON.stringify(formDataObject);
+                console.log(jsonData);
+                try {
+                    await $.ajax({
+                        url: 'http://localhost:5050/updateactivity/' + $(
+                                "#inputActivityIdEdit")
+                            .val(),
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        dataType: "json",
+                        data: jsonData,
+                        success: function (response) {
+                            // Show success message
+                            $("#successMessage").text(
+                                "Activity edited successfully!");
+                            $("#successMessage").show();
+
+                            // Hide success message after 5 seconds
+                            setTimeout(function () {
+                                $("#successMessage").hide();
+                            }, 5000);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle the error by displaying the error message
+                            $("#errorMessage").text("An error occurred: " + jqXHR
+                                .responseText);
+                            $("#errorMessage").show();
+
+                            // Hide the error message after 5 seconds
+                            setTimeout(function () {
+                                $("#errorMessage").hide();
+                            }, 5000);
+                        }
+                    });
+                    // After adding, fetch and update the table
+                    $("#activityFormEdit").hide();
+                    $('#activityFormEdit')[0].reset();
+                    $("#activityForm").show();
+                    $('#activityForm')[0].reset();
+                    await getActivities();
+                } catch (error) {
+                    console.error('Error adding activity:', error);
+                }
+            });
+
+            $('#goalForm').submit(async function (event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                var formDataObject = {};
+                new URLSearchParams(formData).forEach((value, key) => {
+                    if (key == "totalCal") {
+                        formDataObject[key] = parseInt(value, 10);
+                    } else {
+                        formDataObject[key] = value.toString();
+                    }
+                });
+
+                formDataObject["goalId"] = generateRandomId();
+                jsonData = JSON.stringify(formDataObject);
+
+                console.log(jsonData);
+                try {
+                    await $.ajax({
+                        url: 'http://localhost:5050/addgoal',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        dataType: "json",
+                        data: jsonData,
+                        success: function (response) {
+                            // Show success message
+                            $("#successMessageGoal").text(
+                                "Goal added successfully!");
+                            $("#successMessageGoal").show();
+
+                            // Hide success message after 5 seconds
+                            setTimeout(function () {
+                                $("#successMessageGoal").hide();
+                            }, 5000);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle the error by displaying the error message
+                            $("#errorMessageGoal").text("An error occurred: " + jqXHR
+                                .responseText);
+                            $("#errorMessageGoal").show();
+
+                            // Hide the error message after 5 seconds
+                            setTimeout(function () {
+                                $("#errorMessageGoal").hide();
+                            }, 5000);
+                        }
+                    });
+                    // After adding, fetch and update the table
+                    $('#goalForm')[0].reset();
+                    await getGoal();
+                } catch (error) {
+                    console.error('Error adding goal:', error);
+                }
+            });
+
+            $('#goalFormEdit').submit(async function (event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+
+                var formDataObject = {};
+                new URLSearchParams(formData).forEach((value, key) => {
+                    if (key == "deadLine" || key == "desc" || key == "status") {
+                        formDataObject[key] = value.toString();
+                    } else {
+                        formDataObject[key] = parseInt(value, 10);
+                    }
+                });
+
+                jsonData = JSON.stringify(formDataObject);
+                console.log(jsonData);
+                try {
+                    await $.ajax({
+                        url: 'http://localhost:5050/updategoal/' + $(
+                                "#goalIdEdit")
+                            .val(),
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        dataType: "json",
+                        data: jsonData,
+                        success: function (response) {
+                            // Show success message
+                            $("#successMessageGoal").text(
+                                "Goal edited successfully!");
+                            $("#successMessageGoal").show();
+
+                            // Hide success message after 5 seconds
+                            setTimeout(function () {
+                                $("#successMessageGoal").hide();
+                            }, 5000);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle the error by displaying the error message
+                            $("#errorMessageGoal").text("An error occurred: " + jqXHR
+                                .responseText);
+                            $("#errorMessageGoal").show();
+
+                            // Hide the error message after 5 seconds
+                            setTimeout(function () {
+                                $("#errorMessageGoal").hide();
+                            }, 5000);
+                        }
+                    });
+                    // After adding, fetch and update the table
+                    $("#goalFormEdit").hide();
+                    $('#goalFormEdit')[0].reset();
+                    $("#goalForm").show();
+                    $('#goalForm')[0].reset();
+                    await getGoal();
+                } catch (error) {
+                    console.error('Error adding goal:', error);
+                }
+            });
+
+            $('#activities-tab').on('click', async function (event) {
+                console.log("test");
+                try {
+
+                    $("#activityFormEdit").hide();
+                    $('#activityFormEdit')[0].reset();
+                    $("#activityForm").show();
+                    $('#activityForm')[0].reset();
+
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/allactivity'
+                    ); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    updateActivityTable(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+            });
+
+            $('#backAddAcc').on('click', async function (event) {
+                console.log("back to add activity");
+                $("#activityFormEdit").hide();
+                $('#activityFormEdit')[0].reset();
+                $("#activityForm").show();
+                $('#activityForm')[0].reset();
+            });
+
+            $('#backAddGoal').on('click', async function (event) {
+                console.log("back to add activity");
+                $("#goalFormEdit").hide();
+                $('#goalFormEdit')[0].reset();
+                $("#goalForm").show();
+                $('#goalForm')[0].reset();
+            });
+
+            $('#summary-tab').on('click', async function (event) {
+                console.log("test");
+                try {
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/summary'
+                    ); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    updateSummaryTable(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+            });
+
+            $('#goals-tab').on('click', async function (event) {
+                try {
+                    $("#goalFormEdit").hide();
+                    $('#goalFormEdit')[0].reset();
+                    $("#goalForm").show();
+                    $('#goalForm')[0].reset();
+
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/allgoals'
+                    ); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    updateGoalTable(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+            });
+
+            // delete activity
+            $('#activityTableBody').on('click', '.delete-btn', async function (event) {
+                var activityId = $(this).attr('id');
+                console.log('Delete button clicked for activityId:', activityId);
+
+                try {
+                    $('#loadingIndicator').show();
+                    await $.ajax({
+                        url: 'http://localhost:5050/deleteactivity/' + activityId,
+                        method: 'DELETE',
+                        success: function (response) {
+                            // Show success message
+                            $("#successMessage").text(
+                                "Activity deleted successfully!");
+                            $("#successMessage").show();
+
+                            // Hide success message after 5 seconds
+                            setTimeout(function () {
+                                $("#successMessage").hide();
+                            }, 5000);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle the error by displaying the error message
+                            $("#errorMessage").text("An error occurred: " + jqXHR
+                                .responseText);
+                            $("#errorMessage").show();
+
+                            // Hide the error message after 5 seconds
+                            setTimeout(function () {
+                                $("#errorMessage").hide();
+                            }, 5000);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error deleting activity:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+
+            });
+
+            // edit button clicked
+            $('#activityTableBody').on('click', '.edit-btn', async function (event) {
+                var activityId = $(this).attr('id');
+                console.log('Delete button clicked for activityId:', activityId);
+                $("#activityFormEdit").show();
+                // $("#EditAccBtn").show();
+                $("#activityForm").hide();
+
+                try {
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/activity/' + activityId
+                    ); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    fillActivityForm(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+
+            });
+
+            //delete goal
+            $('#goalTableBody').on('click', '.delete-btn', async function (event) {
+                var goalId = $(this).attr('id');
+                console.log('Delete button clicked for goalId:', goalId);
+
+                try {
+                    $('#loadingIndicator').show();
+                    await $.ajax({
+                        url: 'http://localhost:5050/deletegoal/' + goalId,
+                        method: 'DELETE',
+                        success: function (response) {
+                            // Show success message
+                            $("#successMessageGoal").text(
+                                "Goal deleted successfully!");
+                            $("#successMessageGoal").show();
+
+                            // Hide success message after 5 seconds
+                            setTimeout(function () {
+                                $("#successMessageGoal").hide();
+                            }, 5000);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // Handle the error by displaying the error message
+                            $("#errorMessageGoal").text("An error occurred: " + jqXHR
+                                .responseText);
+                            $("#errorMessageGoal").show();
+
+                            // Hide the error message after 5 seconds
+                            setTimeout(function () {
+                                $("#errorMessage").hide();
+                            }, 5000);
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error deleting Goal:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+
+            });
+
+            // goal edit btn clicked
+            $('#goalTableBody').on('click', '.edit-btn', async function (event) {
+                var goalId = $(this).attr('id');
+                console.log('Edit button clicked for goalId:', goalId);
+                $("#goalFormEdit").show();
+                // $("#EditAccBtn").show();
+                $("#goalForm").hide();
+
+                try {
+                    $('#loadingIndicator').show();
+                    console.log("Fetching...");
+                    const response = await fetch(
+                        'http://localhost:5050/goal/' + goalId
+                    ); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    console.log(data); // Log only the response data
+
+                    // add data into table
+                    fillGoalForm(data)
+                } catch (error) {
+                    console.error('Error fetching activities:', error);
+                } finally {
+                    $('#loadingIndicator').hide(); // Hide loading indicator
+                }
+
+            });
+
+
+            // Call getActivities when the page loads to fetch and log data
+            await getActivities();
+
+            // Other functions and code can be added here
+        });
+    </script>
+
+<style>
+        .bg-light-gray {
+            background-color: #f2f2f2;
+            /* Light gray color */
+        }
+    </style>
+
+</body>
+
+</html>
