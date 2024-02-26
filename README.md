@@ -33,14 +33,22 @@ Track your running goals efficiently in real-time, helping you stay motivated an
   go to the console and create your project : https://firebase.google.com/docs/database/
 ### Running the application
 #### Make your database and download your serviceAccountKey.json from your firebase console
-1. go to your firebase console 
-2. select your project 
+1. go to your firebase console
+2. select your project
+
+   ![img_1.png](img_1.png)
 3. go to build, choose firestore database
+
+![img_2.png](img_2.png)
 4. click create database
 5. choose start in test mode, and create
 6. go to user and premission
-7. go to service account 
+
+![img_3.png](img_3.png)
+7. go to service account
 8. click the Generate new private key
+
+![img_4.png](img_4.png)
 
 #### seting up the RunTracker application
 1. clone the github repository
@@ -68,6 +76,7 @@ gradle wrapper
 ```
 8. when you see the application running on Localhost:5050 you can access the app via browser by typing it to access the simple user interface Utilizing the REST API endpoint.
 
+![img.png](img.png)
 
     
 
