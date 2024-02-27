@@ -50,7 +50,9 @@ public class ActivityController {
                 // conver ke json dan kirim
                 ctx.render(json(activities));
             } else {
-                ctx.getResponse().status(Status.NOT_FOUND).send("Data not found");
+                Map<String, String> ErrorMsg = new HashMap<>();
+                ErrorMsg.put("message","Data not found");
+                ctx.getResponse().status(Status.NOT_FOUND).send("{\"error\": \"Data not found\"}");
             }
         });
     }
@@ -144,7 +146,9 @@ public class ActivityController {
     public static void addActivity(Context ctx) {
         ctx.parse(Activity.class).onError(throwable -> {
             // Handle parsing errors
-            ctx.getResponse().status(Status.BAD_REQUEST).send("Bad Request: Invalid data format or type" + throwable);
+            String escapedMessage = throwable.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
         }).then(activity -> {
 
             String validationError = validateActivity(activity);
@@ -173,7 +177,10 @@ public class ActivityController {
             })
             .then(writeResult -> {
                 if (writeResult != null) {
-                    ctx.render(json("Activity added successfully"));
+                    Map<String, String> SuccesMsg = new HashMap<>();
+                    SuccesMsg.put("status", "Success");
+                    SuccesMsg.put("Message", "Activity added successfully");
+                    ctx.render(json(SuccesMsg));
                 } else {
                     // Handle the case where the operation did not succeed
                     ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add activity: Operation was unsuccessful.");
@@ -186,7 +193,9 @@ public class ActivityController {
         try {
             ctx.parse(Activity.class).onError(throwable -> {
                 // Handle parsing errors
-                ctx.getResponse().status(Status.BAD_REQUEST).send("Bad Request: Invalid data format or type");
+                String escapedMessage = throwable.toString().replace("\"", "\'");
+                escapedMessage = escapedMessage.replace("\n", " ");
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
             }).then(activity -> {
 
                 String validationError = validateActivity(activity);
@@ -229,7 +238,10 @@ public class ActivityController {
                     ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update activity: " + throwable.getMessage());
                 }).then(writeResult -> {
                     if (writeResult != null) {
-                        ctx.render(json("Activity updated successfully"));
+                        Map<String, String> SuccesMsg = new HashMap<>();
+                        SuccesMsg.put("status", "Success");
+                        SuccesMsg.put("Message", "Activity updated successfully");
+                        ctx.render(json(SuccesMsg));
                     } else {
                         ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update activity: Operation was unsuccessful.");
                     }
@@ -260,7 +272,10 @@ public class ActivityController {
             ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete activity: " + throwable.getMessage());
         }).then(writeResult -> {
             if (writeResult != null) {
-                ctx.render(json("Activity deleted successfully"));
+                Map<String, String> SuccesMsg = new HashMap<>();
+                SuccesMsg.put("status", "Success");
+                SuccesMsg.put("Message", "Activity deleted successfully");
+                ctx.render(json(SuccesMsg));
             } else {
                 // Handle the case where the operation did not succeed
                 ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete activity: Operation was unsuccessful.");

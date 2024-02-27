@@ -195,7 +195,9 @@ public class GoalController {
     public static void addGoal(Context ctx) {
         ctx.parse(Goal.class).onError(throwable -> {
             // Handle parsing errors
-            ctx.getResponse().status(Status.BAD_REQUEST).send("Bad Request: Invalid data format or type");
+            String escapedMessage = throwable.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
         }).then(goal -> {
 
             String validationError = validateGoal(goal);
@@ -232,7 +234,10 @@ public class GoalController {
                     ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add goals: " + throwable.getMessage());
                 }).then(writeResult -> {
                     if (writeResult != null) {
-                        ctx.render(json("Goal added successfully"));
+                        Map<String, String> SuccesMsg = new HashMap<>();
+                        SuccesMsg.put("status", "Success");
+                        SuccesMsg.put("Message", "Goal added successfully");
+                        ctx.render(json(SuccesMsg));
                     } else {
                         // Handle the case where the operation did not succeed
                         ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add goal: Operation was unsuccessful.");
@@ -249,7 +254,9 @@ public class GoalController {
 
         ctx.parse(Goal.class).onError(throwable -> {
             // Handle parsing errors
-            ctx.getResponse().status(Status.BAD_REQUEST).send("Bad Request: Invalid data format or type");
+            String escapedMessage = throwable.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
         }).then(goal -> {
 
             String validationError = validateGoal(goal);
@@ -309,7 +316,10 @@ public class GoalController {
                     ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update goals: " + throwable.getMessage());
                 }).then(writeResult -> {
                     if (writeResult != null) {
-                        ctx.render(json("Goal updated successfully"));
+                        Map<String, String> SuccesMsg = new HashMap<>();
+                        SuccesMsg.put("status", "Success");
+                        SuccesMsg.put("Message", "Goal updated successfully");
+                        ctx.render(json(SuccesMsg));
                     } else {
                         // Handle the case where the operation did not succeed
                         ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update goal: Operation was unsuccessful.");
@@ -343,7 +353,10 @@ public class GoalController {
             ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete goals: " + throwable.getMessage());
         }).then(writeResult -> {
             if (writeResult != null) {
-                ctx.render(json("Goal deleted successfully"));
+                Map<String, String> SuccesMsg = new HashMap<>();
+                SuccesMsg.put("status", "Success");
+                SuccesMsg.put("Message", "Goal deleted successfully");
+                ctx.render(json(SuccesMsg));
             } else {
                 // Handle the case where the operation did not succeed
                 ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete goal: Operation was unsuccessful.");

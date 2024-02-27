@@ -91,7 +91,238 @@ gradle wrapper
   <img src="img/img.png" alt="img.png">
 </p>
 
-### [API Documentation](#api-documentation)
+## [API Documentation](#api-documentation)
+
+This documentation outlines the available endpoint within the application, designed for integration with the user's own user interface.
+
+### Fetching data
+```
+GET /allactivity
+```
+response example
+```
+[
+    {
+        "date": "2023-02-24",
+        "duration": 43,
+        "activityId": 10312,
+        "distance": 413,
+        "avgHeartBeat": 81,
+        "calories": 140,
+        "steps": 3104
+    },
+    {
+        "date": "2023-02-24",
+        "duration": 99,
+        "activityId": 13662,
+        "distance": 321,
+        "avgHeartBeat": 81,
+        "calories": 311,
+        "steps": 3104
+    }
+]
+```
+**Description :**
+Retrieve all activities user has created before
+```
+GET /allgoals
+```
+response example
+```
+[
+    {
+        "goalId": 107,
+        "totalCal": 400,
+        "deadLine": "2023-02-24",
+        "desc": "goals akhir tahun, harusss bisaa !!!",
+        "status": "Finish"
+    },
+    {
+        "goalId": 108,
+        "totalCal": 100,
+        "deadLine": "2024-07-05",
+        "desc": "goals akhir tahun cuy !!!",
+        "status": "Finish"
+    }
+]
+```
+**Description :**
+Retrieve all activities user has created before
+```
+GET /summary
+```
+response example
+```
+{
+    "totalDuration": 4141,
+    "totalStep": 13551,
+    "AvgHBeat": 1243,
+    "totalCalories": 3757,
+    "totalDistance": 10410
+}
+```
+**Description :**
+Retrieve the summary of all the activities that user has created before
+```
+GET /activity/{activityId}
+```
+example response
+```
+{
+    "date": "2024-02-24",
+    "duration": 530,
+    "activityId": 110,
+    "distance": 4110,
+    "avgHeartBeat": 80,
+    "calories": 840,
+    "steps": 3104
+}
+```
+**Description :**
+Retrieve an activity created by user based on the id 
+```
+GET /goal/{goalId}
+```
+response example
+```
+{
+    "date": "2024-02-24",
+    "duration": 530,
+    "activityId": 110,
+    "distance": 4110,
+    "avgHeartBeat": 80,
+    "calories": 840,
+    "steps": 3104
+}
+```
+**Description :**
+Retrieve a goal created by user based on the id 
+
+### Adding data
+
+```
+POST /addactivity
+Content-Type: application/json
+```
+content example :
+```
+{
+    "activityId": 113,
+    "date": "2024-02-24",
+    "duration": 53,
+    "calories": 220,
+    "distance": 4110,
+    "steps": 3104,
+    "avgHeartBeat": 80
+}
+```
+response example
+```
+{
+    "Message": "Activity added successfully",
+    "status": "Success"
+}
+```
+**Description :**
+Adding activity data into database with a structure and datatype as follows
+<br>
+- activityId : Integer
+- date : String
+- duration : Integer
+- calories : Integer
+- distance : Integer
+- steps : Integer
+- avgHeartBeat : Integer
+```
+POST /addgoal
+Content-Type: application/json
+```
+content example :
+```
+{
+    "goalId": 121,
+    "deadLine": "2025-03-05",
+    "totalCal": 1220,
+    "desc": "goals awal tahun"
+}
+```
+response example
+```
+{
+    "Message": "Goal added successfully",
+    "status": "Success"
+}
+```
+**Description :**
+Adding goal data into database with a structure and datatype as follows
+<br>
+- goalId : Integer
+- deadLine : String
+- totalCal : Integer
+- desc : String
+
+### Editing data
+```
+PUT /updateactivity/{activityId}
+Content-Type: application/json
+```
+content example :
+```
+{
+    "date": "2024-02-24",
+    "duration": 53,
+    "calories": 220,
+    "distance": 4110,
+    "steps": 3104,
+    "avgHeartBeat": 80
+}
+```
+response example
+```
+{
+    "Message": "Activity updated successfully",
+    "status": "Success"
+}
+```
+**Description :**
+Editing activity data into database with a structure and datatype as follows
+<br>
+- data : String
+- duration : Integer
+- calories : Integer
+- distance : Integer
+- steps : Integer
+- avgHeartBeat : Integer
+
+
+```
+PUT /updategoal/{goalId}
+Content-Type: application/json
+```
+content example :
+```
+{
+    "deadLine": "2025-03-05",
+    "totalCal": 1220,
+    "desc": "goals awal tahun"
+}
+```
+response example
+```
+{
+    "Message": "Goal updated successfully",
+    "status": "Success"
+}
+```
+**Description :**
+Editing activity data into database with a structure and datatype as follows
+<br>
+- deadLine : String
+- totalCal : Integer
+- desc : String
+
+
+
 
 
     
