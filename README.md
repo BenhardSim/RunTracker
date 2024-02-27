@@ -36,10 +36,10 @@ Track your running goals efficiently in real-time, helping you stay motivated an
 1. go to your firebase console
 2. create your project 
 <p align="center">
-  <img src="img/img_6.png" alt="img_6.png">
+  <img src="img/img_5.png" alt="img_6.png">
 </p>
 <p align="center">
-  <img src="img/img_7.png" alt="img_7.png">
+  <img src="img/img_6.png" alt="img_7.png">
 </p>
 
 3. select your project
