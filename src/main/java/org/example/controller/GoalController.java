@@ -160,7 +160,9 @@ public class GoalController {
             promise.onError(throwable -> {
                 // Handle the error
                 throwable.printStackTrace();
-                ctx.getResponse().status(Status.BAD_REQUEST).send("Failed to read goals: " + throwable.getMessage());
+                String escapedMessage = throwable.toString().replace("\"", "\'");
+                escapedMessage = escapedMessage.replace("\n", " ");
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Failed to read goals: "+ escapedMessage +" \" \n}");
             }).then(querySnapshot -> {
                 if(querySnapshot.exists()){
                     Map<String, Object> goal = new HashMap<>();
@@ -179,13 +181,14 @@ public class GoalController {
 
                     ctx.render(json(goal));
                 }else {
-                    ctx.getResponse().status(Status.NOT_FOUND).send("No such goal with ID: " + goalId);
+                    ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such goal with ID: "+ goalId +" \" \n}");
                 }
-
             });
 
         }).exceptionally(ex -> {
-            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Error retrieving total calories: " + ex.getMessage());
+            String escapedMessage = ex.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Error retrieving total calories: "+ escapedMessage +" \" \n}");
             return null;
         });
 
@@ -197,12 +200,11 @@ public class GoalController {
             // Handle parsing errors
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
-            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
         }).then(goal -> {
-
             String validationError = validateGoal(goal);
             if (validationError != null) {
-                ctx.getResponse().status(Status.BAD_REQUEST).send(validationError);
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
                 return;
             }
 
@@ -256,12 +258,12 @@ public class GoalController {
             // Handle parsing errors
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
-            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
         }).then(goal -> {
 
             String validationError = validateGoal(goal);
             if (validationError != null) {
-                ctx.getResponse().status(Status.BAD_REQUEST).send(validationError);
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
                 return;
             }
 
@@ -313,7 +315,9 @@ public class GoalController {
                 promise.onError(throwable -> {
                     // Handle the error
                     throwable.printStackTrace();
-                    ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update goals: " + throwable.getMessage());
+                    String escapedMessage = throwable.toString().replace("\"", "\'");
+                    escapedMessage = escapedMessage.replace("\n", " ");
+                    ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such goal - : "+ escapedMessage +" \" \n}");
                 }).then(writeResult -> {
                     if (writeResult != null) {
                         Map<String, String> SuccesMsg = new HashMap<>();
@@ -322,7 +326,7 @@ public class GoalController {
                         ctx.render(json(SuccesMsg));
                     } else {
                         // Handle the case where the operation did not succeed
-                        ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update goal: Operation was unsuccessful.");
+                        ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such goal with ID: "+ goalId +" \" \n}");
                     }
                 });
             }).exceptionally(ex -> {
@@ -350,7 +354,7 @@ public class GoalController {
         promise.onError(throwable -> {
             // Handle the error
             throwable.printStackTrace();
-            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete goals: " + throwable.getMessage());
+            ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such goal with ID: "+ goalId +" \" \n}");
         }).then(writeResult -> {
             if (writeResult != null) {
                 Map<String, String> SuccesMsg = new HashMap<>();
@@ -359,7 +363,7 @@ public class GoalController {
                 ctx.render(json(SuccesMsg));
             } else {
                 // Handle the case where the operation did not succeed
-                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete goal: Operation was unsuccessful.");
+                ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such goal with ID: "+ goalId +" \" \n}");
             }
         });
     }

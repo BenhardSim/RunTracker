@@ -805,6 +805,7 @@
                             }, 5000);
                         }
                     });
+                    await getActivities();
                 } catch (error) {
                     console.error('Error deleting activity:', error);
                 } finally {
@@ -876,6 +877,7 @@
                             }, 5000);
                         }
                     });
+                    await getGoal();
                 } catch (error) {
                     console.error('Error deleting Goal:', error);
                 } finally {

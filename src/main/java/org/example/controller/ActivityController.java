@@ -39,7 +39,9 @@ public class ActivityController {
         promise.onError(throwable -> {
             // Handle the error
             throwable.printStackTrace();
-            ctx.render(json("Failed to read activity: " + throwable.getMessage()));
+            String escapedMessage = throwable.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"Failed to read activity: "+ escapedMessage +" \"}");
         }).then(querySnapshot -> {
             if (querySnapshot != null) {
                 // mapping data ke bentuk dictionary
@@ -50,9 +52,7 @@ public class ActivityController {
                 // conver ke json dan kirim
                 ctx.render(json(activities));
             } else {
-                Map<String, String> ErrorMsg = new HashMap<>();
-                ErrorMsg.put("message","Data not found");
-                ctx.getResponse().status(Status.NOT_FOUND).send("{\"error\": \"Data not found\"}");
+                ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"error\": \"Data not found\"}");
             }
         });
     }
@@ -73,15 +73,17 @@ public class ActivityController {
         });
 
         promise.onError(throwable -> {
-            // Handle the error
+            // Handle the errorz
             throwable.printStackTrace();
-            ctx.render(json("Failed to read activity: " + throwable.getMessage()));
+            String escapedMessage = throwable.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"Failed to read activity: "+ escapedMessage +" \" \n}");
         }).then(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 // Document found, you can access its data
                 ctx.render(json(documentSnapshot.getData()));
             } else {
-                ctx.getResponse().status(Status.NOT_FOUND).send("No such document with ID: " + activityId);
+                ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such document with ID: "+ activityId +" \" \n}");
             }
         });
     }
@@ -104,7 +106,9 @@ public class ActivityController {
         promise.onError(throwable -> {
             // Handle the error
             throwable.printStackTrace();
-            ctx.render(json("Failed to read activity: " + throwable.getMessage()));
+            String escapedMessage = throwable.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"Failed to read activity: "+ escapedMessage +" \" \n}");
         }).then(querySnapshot -> {
             if (querySnapshot != null) {
 
@@ -138,7 +142,7 @@ public class ActivityController {
                 // conver ke json dan kirim
                 ctx.render(json(summary));
             } else {
-                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to get all activities: Operation was unsuccessful.");
+                ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"Failed to get all activities: Operation was unsuccessful.\" \n}");
             }
         });
     }
@@ -153,7 +157,7 @@ public class ActivityController {
 
             String validationError = validateActivity(activity);
             if (validationError != null) {
-                ctx.getResponse().status(Status.BAD_REQUEST).send(validationError);
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
                 return;
             }
 
@@ -173,7 +177,9 @@ public class ActivityController {
             promise.onError(throwable -> {
                 // Handle the error
                 throwable.printStackTrace();
-                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add activity: " + throwable.getMessage());
+                String escapedMessage = throwable.toString().replace("\"", "\'");
+                escapedMessage = escapedMessage.replace("\n", " ");
+                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Failed to add activity: "+ escapedMessage +" \" \n}");
             })
             .then(writeResult -> {
                 if (writeResult != null) {
@@ -195,12 +201,12 @@ public class ActivityController {
                 // Handle parsing errors
                 String escapedMessage = throwable.toString().replace("\"", "\'");
                 escapedMessage = escapedMessage.replace("\n", " ");
-                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
             }).then(activity -> {
 
                 String validationError = validateActivity(activity);
                 if (validationError != null) {
-                    ctx.getResponse().status(Status.BAD_REQUEST).send(validationError);
+                    ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
                     return;
                 }
 
@@ -221,7 +227,6 @@ public class ActivityController {
                 // update
                 ApiFuture<WriteResult> future = db.collection("activities").document(String.valueOf(activityId)).update(updateData);
 
-//                Promise<WriteResult> promise = Blocking.get(future::get);
                 Promise<WriteResult> promise = Blocking.get(() -> {
                     try {
                         return future.get();
@@ -235,7 +240,9 @@ public class ActivityController {
                 promise.onError(throwable -> {
                     // Handle the error
                     throwable.printStackTrace();
-                    ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update activity: " + throwable.getMessage());
+                    String escapedMessage = throwable.toString().replace("\"", "\'");
+                    escapedMessage = escapedMessage.replace("\n", " ");
+                    ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such document : "+ escapedMessage +" \" \n}");
                 }).then(writeResult -> {
                     if (writeResult != null) {
                         Map<String, String> SuccesMsg = new HashMap<>();
@@ -243,12 +250,14 @@ public class ActivityController {
                         SuccesMsg.put("Message", "Activity updated successfully");
                         ctx.render(json(SuccesMsg));
                     } else {
-                        ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to update activity: Operation was unsuccessful.");
+                        ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such document with ID: "+ activityId +" \" \n}");
                     }
                 });
             });
         }catch (Exception e) {
-            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Internal server error - " + e.getMessage());
+            String escapedMessage = e.toString().replace("\"", "\'");
+            escapedMessage = escapedMessage.replace("\n", " ");
+            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"IInternal server error - "+ escapedMessage +" \" \n}");
         }
     }
 
@@ -269,7 +278,7 @@ public class ActivityController {
         promise.onError(throwable -> {
             // Handle the error
             throwable.printStackTrace();
-            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete activity: " + throwable.getMessage());
+            ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such document with ID: "+ activityId +" \" \n}");
         }).then(writeResult -> {
             if (writeResult != null) {
                 Map<String, String> SuccesMsg = new HashMap<>();
@@ -278,7 +287,7 @@ public class ActivityController {
                 ctx.render(json(SuccesMsg));
             } else {
                 // Handle the case where the operation did not succeed
-                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to delete activity: Operation was unsuccessful.");
+                ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such document with ID: "+ activityId +" \" \n}");
             }
         });
     }

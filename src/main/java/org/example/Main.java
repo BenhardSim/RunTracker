@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.controller.ActivityController;
 import org.example.controller.GoalController;
-import org.example.entity.Goal;
 import org.example.firebaseConfig.FirebaseInitializer;
 import org.example.util.CorsHandler;
 import org.example.util.MyClientErrorHandler;

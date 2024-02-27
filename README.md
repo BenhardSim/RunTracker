@@ -61,6 +61,8 @@ Track your running goals efficiently in real-time, helping you stay motivated an
   <img src="img/img_4.png" alt="img/img_4.png">
 </p>
 
+9. Make sure you save the .json file for later use
+
 #### seting up the RunTracker application
 1. clone the github repository
 
@@ -71,9 +73,9 @@ git clone https://github.com/BenhardSim/RunTracker.git
 ```
 cd RunTracker
 ```  
-3. Make sure you have serviceAccountKey.json from the firebase console
+3. Make sure you have the .json private key that generated from the firebase console
 4. Make sure you rename it into serviceAccountKey.json
-5. go to the specified location, create a dirrectory and file.
+5. go to the specified location, create a dirrectory called 'key' and file with name 'serviceAccountKey.json'.
 ```
 mkdir src/main/java/org/example/firebaseConfig/key
 touch src/main/java/org/example/firebaseConfig/key/serviceAccountKey.json
@@ -372,6 +374,41 @@ response example
 ```
 **Description :** deleting goal data based on goal Id
 
+
+### Error Handling
+
+**Bad Request : 400**
+
+reponse example
+```
+{
+    "message": "Invalid data format or type + {err} "
+}
+```
+**Description :**
+Wrong data type or empty field in Json request body
+
+**Bad Request : 404**
+
+reponse example
+```
+{
+    "message": "No such document with ID: 11012 "
+}
+```
+**Description :**
+No data can be found in the database 
+
+**Bad Request : 500**
+
+reponse example
+```
+{
+    "message": "Failed to add activity: + {errMsg}"
+}
+```
+**Description :**
+something is wrong in the logic of back-end or something wrong when reading, creating, deleting, or updating data in the database
 
 
 
