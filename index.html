@@ -453,12 +453,12 @@
                 new URLSearchParams(formData).forEach((value, key) => {
                     if (key == "date") {
 
-                        var dateObject = luxon.DateTime.fromISO(value);
+                        // var dateObject = luxon.DateTime.fromISO(value);
 
-                        // Format the date as "YYYY-DD-MM"
-                        var formattedDate = dateObject.toFormat('yyyy-dd-MM');
+                        // // Format the date as "YYYY-DD-MM"
+                        // var formattedDate = dateObject.toFormat('yyyy-MM-dd');
 
-                        formDataObject[key] = formattedDate;
+                        formDataObject[key] = value.toString();
                     } else {
                         formDataObject[key] = parseInt(value, 10);
                     }

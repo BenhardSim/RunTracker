@@ -152,11 +152,12 @@ public class ActivityController {
             // Handle parsing errors
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
-            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"error\": \"Bad Request\", \"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
         }).then(activity -> {
 
             String validationError = validateActivity(activity);
             if (validationError != null) {
+                System.out.println("Data empty..");
                 ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
                 return;
             }

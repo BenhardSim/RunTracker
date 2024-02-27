@@ -34,34 +34,43 @@ Track your running goals efficiently in real-time, helping you stay motivated an
 ### Running the application
 #### Make your database and download your serviceAccountKey.json from your firebase console
 1. go to your firebase console
-2. select your project
+2. create your project 
+<p align="center">
+  <img src="img/img_6.png" alt="img_6.png">
+</p>
+<p align="center">
+  <img src="img/img_7.png" alt="img_7.png">
+</p>
+
+3. select your project
 
 <p align="center">
    <img src="img/img_1.png" alt="img_1.png">
 </p>
 
-3. go to build, choose firestore database
+4. go to build, choose firestore database
 
 <p align="center">
   <img src="img/img_2.png" alt="img_2.png">
 </p>
 
-4. click create database
-5. choose start in test mode, and create
-6. go to user and premission
+5. click create database
+6. select region and click next 
+7. choose start in test mode, and create
+8. go to user and permission
 
 <p align="center">
   <img src="img/img_3.png" alt="img_3.png">
 </p>
 
-7. go to service account
-8. click the Generate new private key
+9. go to service account
+10. click the Generate new private key
 
 <p align="center">
   <img src="img/img_4.png" alt="img/img_4.png">
 </p>
 
-9. Make sure you save the .json file for later use
+11. Make sure you save the .json file for later use
 
 #### seting up the RunTracker application
 1. clone the github repository
@@ -69,13 +78,13 @@ Track your running goals efficiently in real-time, helping you stay motivated an
 ```
 git clone https://github.com/BenhardSim/RunTracker.git
 ```
-2. change dirrectory
+2. change directory
 ```
 cd RunTracker
 ```  
 3. Make sure you have the .json private key that generated from the firebase console
 4. Make sure you rename it into serviceAccountKey.json
-5. go to the specified location, create a dirrectory called 'key' and file with name 'serviceAccountKey.json'.
+5. go to the specified location, create a directory called 'key' and file with name 'serviceAccountKey.json'.
 ```
 mkdir src/main/java/org/example/firebaseConfig/key
 touch src/main/java/org/example/firebaseConfig/key/serviceAccountKey.json

@@ -177,6 +177,8 @@ public class GoalController {
                         goal.put("status", "Finish");
                     } else if (targetDate.isBefore(currentDate) && !status.equals("Finish")) {
                         goal.put("status", "DeadLine Exceeded");
+                    }else {
+                        goal.put("status", "DeadLine Exceeded");
                     }
 
                     ctx.render(json(goal));
@@ -200,10 +202,11 @@ public class GoalController {
             // Handle parsing errors
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
-            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or typee "+ escapedMessage +" \" \n}");
         }).then(goal -> {
             String validationError = validateGoal(goal);
             if (validationError != null) {
+                System.out.println("Data empty..");
                 ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
                 return;
             }
