@@ -23,10 +23,10 @@ public class ActivityController {
 
     public static void getAllActivity(Context ctx) {
         Firestore db = getFirestore();
-        // berfungsi untuk mengambil data dari database secara async
+        // get the data inside the database in async
         ApiFuture<QuerySnapshot> future = db.collection("activities").get();
 
-        // mengambilData dari ApiFuture dan membuat menjadi promise
+        // take the data from future and add it into a promise
         Promise<QuerySnapshot> promise = Blocking.get(() -> {
             try {
                 return future.get();
@@ -45,12 +45,12 @@ public class ActivityController {
         }).then(querySnapshot -> {
 
             if (querySnapshot != null) {
-                // mapping data ke bentuk dictionary
+                // map into a list of dictionary
                 List<Map<String, Object>> activities = querySnapshot.getDocuments().stream()
                         .map(QueryDocumentSnapshot::getData)
                         .collect(Collectors.toList());
 
-                // convert ke json dan kirim
+                // convert to json and send
                 ctx.render(json(activities));
             } else {
                 ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"error\": \"Data not found\"}");
@@ -81,7 +81,7 @@ public class ActivityController {
             ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"Failed to read activity: "+ escapedMessage +" \" \n}");
         }).then(documentSnapshot -> {
             if (documentSnapshot.exists()) {
-                // Document found, you can access its data
+                // convert to json and send
                 ctx.render(json(documentSnapshot.getData()));
             } else {
                 ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"No such document with ID: "+ activityId +" \" \n}");
@@ -91,10 +91,10 @@ public class ActivityController {
 
     public static void getStatistic(Context ctx) {
         Firestore db = getFirestore();
-        // berfungsi untuk mengambil data dari database secara async
+        // taking data from database asynchronously
         ApiFuture<QuerySnapshot> future = db.collection("activities").get();
 
-        // mengambil Data dari ApiFuture dan membuat menjadi promise
+        // waiting data from database and wrap it inside promise
         Promise<QuerySnapshot> promise = Blocking.get(() -> {
             try {
                 return future.get();
@@ -148,50 +148,113 @@ public class ActivityController {
         });
     }
 
+//    public static void addActivity(Context ctx) {
+//        ctx.parse(Activity.class).onError(throwable -> {
+//            // Handle parsing errors
+//            String escapedMessage = throwable.toString().replace("\"", "\'");
+//            escapedMessage = escapedMessage.replace("\n", " ");
+//            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+//
+//        }).then(activity -> {
+//
+//            String validationError = validateActivity(activity);
+//            if (validationError != null) {
+//                System.out.println("Data empty..");
+//                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
+//                return;
+//            }
+//
+//            Firestore db = getFirestore();
+//
+//            // mengirim data ke dalam database secara async
+//            ApiFuture<WriteResult> future = db.collection("activities").document(String.valueOf(activity.getActivityId())).set(activity);
+//
+//            Promise<WriteResult> promise = Blocking.get(() -> {
+//                try {
+//                    return future.get();
+//                } catch (Exception e) {
+//                    // Handle the exception
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//
+//            promise.onError(throwable -> {
+//                // Handle the error
+//                throwable.printStackTrace();
+//                String escapedMessage = throwable.toString().replace("\"", "\'");
+//                escapedMessage = escapedMessage.replace("\n", " ");
+//                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Failed to add activity: "+ escapedMessage +" \" \n}");
+//            })
+//            .then(writeResult -> {
+//                if (writeResult != null) {
+//                    Map<String, String> SuccesMsg = new HashMap<>();
+//                    SuccesMsg.put("status", "Success");
+//                    SuccesMsg.put("Message", "Activity added successfully");
+//                    ctx.render(json(SuccesMsg));
+//                } else {
+//                    // Handle the case where the operation did not succeed
+//                    ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add activity: Operation was unsuccessful.");
+//                }
+//            });
+//
+//
+//
+//        });
+//    }
+
     public static void addActivity(Context ctx) {
         ctx.parse(Activity.class).onError(throwable -> {
             // Handle parsing errors
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
-            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type " + escapedMessage + " \" \n}");
         }).then(activity -> {
-
             String validationError = validateActivity(activity);
             if (validationError != null) {
                 System.out.println("Data empty..");
-                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"" + validationError + " \" \n}");
                 return;
             }
 
             Firestore db = getFirestore();
-            // berfungsi untuk mengirim data dari database secara async
-            ApiFuture<WriteResult> future = db.collection("activities").document(String.valueOf(activity.getActivityId())).set(activity);
 
-            Promise<WriteResult> promise = Blocking.get(() -> {
-                try {
-                    return future.get();
-                } catch (Exception e) {
-                    // Handle the exception
-                    throw new RuntimeException(e);
-                }
-            });
+            // get if the id is already inside database
+            DocumentReference docRef = db.collection("activities").document(String.valueOf(activity.getActivityId()));
+
+            // Check if the document with the given ID already exists
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            Promise<DocumentSnapshot> promise = Blocking.get( () -> future.get());
 
             promise.onError(throwable -> {
-                // Handle the error
+
+                // Handle the error during document existence check
                 throwable.printStackTrace();
                 String escapedMessage = throwable.toString().replace("\"", "\'");
                 escapedMessage = escapedMessage.replace("\n", " ");
-                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Failed to add activity: "+ escapedMessage +" \" \n}");
-            })
-            .then(writeResult -> {
-                if (writeResult != null) {
-                    Map<String, String> SuccesMsg = new HashMap<>();
-                    SuccesMsg.put("status", "Success");
-                    SuccesMsg.put("Message", "Activity added successfully");
-                    ctx.render(json(SuccesMsg));
+                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Error checking activity existence: " + escapedMessage + " \" \n}");
+
+            }).then(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    // Document exists, handle accordingly
+                    ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Activity with the given ID already exists.\"}");
                 } else {
-                    // Handle the case where the operation did not succeed
-                    ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add activity: Operation was unsuccessful.");
+                    // Document does not exist, proceed to add new activity
+                    ApiFuture<WriteResult> addFuture = docRef.set(activity);
+                    Promise<WriteResult> addPromise = Blocking.get(() -> addFuture.get());
+
+                    addPromise.onError(throwable -> {
+                                // Handle the error
+                                throwable.printStackTrace();
+                                String escapedMessage = throwable.toString().replace("\"", "\'");
+                                escapedMessage = escapedMessage.replace("\n", " ");
+                                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Failed to add activity: " + escapedMessage + " \" \n}");
+                            })
+                            .then(writeResult -> {
+                                Map<String, String> successMsg = new HashMap<>();
+                                successMsg.put("status", "Success");
+                                successMsg.put("message", "Activity added successfully");
+                                ctx.render(json(successMsg));
+                            });
                 }
             });
         });

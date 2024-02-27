@@ -202,59 +202,58 @@ public class GoalController {
             // Handle parsing errors
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
-            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or typee "+ escapedMessage +" \" \n}");
+            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type " + escapedMessage + " \" \n}");
         }).then(goal -> {
-
-            String validationError = validateGoal(goal);
-            if (validationError != null) {
-                System.out.println("Data empty..");
-                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
-                return;
-            }
-
             Firestore db = getFirestore();
 
-            // menghitung jumlah total kalori yang sudah didapat
-            System.out.println("count calories...");
-            totalCalories().thenAccept(result -> {
+            // Check if goalId exists
+            DocumentReference docRef = db.collection("goals").document(String.valueOf(goal.getGoalId()));
+            ApiFuture<DocumentSnapshot> future = docRef.get();
+            Promise<DocumentSnapshot> checkPromise = Blocking.get(() -> future.get());
 
-                // membandingkan nilai total calories saat ini dengan calories goal
-                if(result >= goal.getTotalCal()){
-                    goal.setStatus("Finish");
+            checkPromise.onError(throwable -> {
+                // Handle the error
+                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to check goalId: " + throwable.getMessage());
+            }).then(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    // goalId exists, handle accordingly
+                    ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Goal with the given ID already exists.\"}");
+                } else {
+                    // goalId does not exist, proceed with counting total calories and adding goal
+                    totalCalories().thenAccept(result -> {
+                        // Compare total calories with goal's calorie target
+                        if(result >= goal.getTotalCal()){
+                            goal.setStatus("Finished");
+                        } else {
+                            goal.setStatus("In Progress");
+                        }
+
+                        // Proceed to add goal
+                        ApiFuture<WriteResult> addFuture = db.collection("goals").document(String.valueOf(goal.getGoalId())).set(goal);
+                        Promise<WriteResult> addPromise = Blocking.get(() -> addFuture.get());
+
+                        addPromise.onError(addThrowable -> {
+                            // Handle the error
+                            ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add goal: " + addThrowable.getMessage());
+                        }).then(writeResult -> {
+                            if (writeResult != null) {
+                                Map<String, String> successMsg = new HashMap<>();
+                                successMsg.put("status", "Success");
+                                successMsg.put("message", "Goal added successfully");
+                                ctx.render(json(successMsg));
+                            } else {
+                                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add goal: Operation was unsuccessful.");
+                            }
+                        });
+                    }).exceptionally(ex -> {
+                        ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Error retrieving total calories: " + ex.getMessage());
+                        return null;
+                    });
                 }
-
-                // berfungsi untuk mengirim data dari database secara async
-                ApiFuture<WriteResult> future = db.collection("goals").document(String.valueOf(goal.getGoalId())).set(goal);
-                Promise<WriteResult> promise = Blocking.get(() -> {
-                    try {
-                        return future.get();
-                    } catch (Exception e) {
-                        // Handle the exception
-                        throw new RuntimeException(e);
-                    }
-                });
-
-                promise.onError(throwable -> {
-                    // Handle the error
-                    throwable.printStackTrace();
-                    ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add goals: " + throwable.getMessage());
-                }).then(writeResult -> {
-                    if (writeResult != null) {
-                        Map<String, String> SuccesMsg = new HashMap<>();
-                        SuccesMsg.put("status", "Success");
-                        SuccesMsg.put("Message", "Goal added successfully");
-                        ctx.render(json(SuccesMsg));
-                    } else {
-                        // Handle the case where the operation did not succeed
-                        ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add goal: Operation was unsuccessful.");
-                    }
-                });
-            }).exceptionally(ex -> {
-                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Error retrieving total calories: " + ex.getMessage());
-                return null;
             });
         });
     }
+
 
     public static void updateGoal(Context ctx) {
 
