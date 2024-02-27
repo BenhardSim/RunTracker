@@ -96,6 +96,8 @@ gradle wrapper
 This documentation outlines the available endpoint within the application, designed for integration with the user's own user interface.
 
 ### Fetching data
+#### RETRIEVING ALL ACTIVITY
+
 ```
 GET /allactivity
 ```
@@ -124,6 +126,10 @@ response example
 ```
 **Description :**
 Retrieve all activities user has created before
+
+<BR>
+
+#### RETRIEVING ALL GOALS
 ```
 GET /allgoals
 ```
@@ -148,6 +154,10 @@ response example
 ```
 **Description :**
 Retrieve all activities user has created before
+
+<BR>
+
+#### RETRIEVING SUMMARY
 ```
 GET /summary
 ```
@@ -163,10 +173,15 @@ response example
 ```
 **Description :**
 Retrieve the summary of all the activities that user has created before
+
+<BR>
+
+#### RETRIEVING ACTIVITY DATA BASED ON ID
+
 ```
 GET /activity/{activityId}
 ```
-example response
+response example
 ```
 {
     "date": "2024-02-24",
@@ -199,6 +214,7 @@ response example
 Retrieve a goal created by user based on the id 
 
 ### Adding data
+#### ADDING ACTIVITY DATA
 
 ```
 POST /addactivity
@@ -233,6 +249,10 @@ Adding activity data into database with a structure and datatype as follows
 - distance : Integer
 - steps : Integer
 - avgHeartBeat : Integer
+
+<BR>
+
+#### ADDING GOAL DATA
 ```
 POST /addgoal
 Content-Type: application/json
@@ -262,6 +282,7 @@ Adding goal data into database with a structure and datatype as follows
 - desc : String
 
 ### Editing data
+#### EDITING ACTIVITY DATA
 ```
 PUT /updateactivity/{activityId}
 Content-Type: application/json
@@ -294,7 +315,8 @@ Editing activity data into database with a structure and datatype as follows
 - steps : Integer
 - avgHeartBeat : Integer
 
-
+<BR><BR>
+#### EDITING GOAL DATA
 ```
 PUT /updategoal/{goalId}
 Content-Type: application/json
@@ -320,6 +342,35 @@ Editing activity data into database with a structure and datatype as follows
 - deadLine : String
 - totalCal : Integer
 - desc : String
+
+### Deleting data
+#### DELETING ACTIVITY DATA
+```
+DELETE /deleteactivity/{activityId}
+Content-Type: application/json
+```
+  response example
+```
+{
+    "Message": "Activity deleted successfully",
+    "status": "Success"
+}
+```
+**Description :** deleting activity data based on activity Id
+<br><br>
+#### DELETING GOAL DATA
+```
+DELETE /deletegoal/{goalId}
+Content-Type: application/json
+```
+response example
+```
+{
+    "Message": "Goal deleted successfully",
+    "status": "Success"
+}
+```
+**Description :** deleting goal data based on goal Id
 
 
 
