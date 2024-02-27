@@ -33,7 +33,7 @@ public class Main {
                 )
                 .handlers(chain -> chain
                         .all(new CorsHandler())
-                        // runing the User interface
+                        // running the User interface
                         .get("", ctx -> renderHtml(ctx, file("index.html")))
 
                         // get activities and goal data

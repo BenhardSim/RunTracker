@@ -572,6 +572,16 @@
                 new URLSearchParams(formData).forEach((value, key) => {
                     if (key == "totalCal") {
                         formDataObject[key] = parseInt(value, 10);
+                    }
+                    else if(key == "deadLine" && value == null) {
+
+                        // var dateObject = luxon.DateTime.fromISO(value);
+
+                        // // Format the date as "YYYY-DD-MM"
+                        // var formattedDate = dateObject.toFormat('yyyy-MM-dd');
+
+                        formDataObject[key] = value.toString();
+                        console.log("val deadline : " + value.toString());
                     } else {
                         formDataObject[key] = value.toString();
                     }
@@ -601,7 +611,8 @@
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             // Handle the error by displaying the error message
-                            $("#errorMessageGoal").text("An error occurred: " + jqXHR
+                            $("#errorMessageGoal").text("An error occurred: " +
+                                jqXHR
                                 .responseText);
                             $("#errorMessageGoal").show();
 
@@ -656,7 +667,8 @@
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             // Handle the error by displaying the error message
-                            $("#errorMessageGoal").text("An error occurred: " + jqXHR
+                            $("#errorMessageGoal").text("An error occurred: " +
+                                jqXHR
                                 .responseText);
                             $("#errorMessageGoal").show();
 
@@ -867,7 +879,8 @@
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             // Handle the error by displaying the error message
-                            $("#errorMessageGoal").text("An error occurred: " + jqXHR
+                            $("#errorMessageGoal").text("An error occurred: " +
+                                jqXHR
                                 .responseText);
                             $("#errorMessageGoal").show();
 

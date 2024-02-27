@@ -10,7 +10,7 @@ This application follows the Controller, Boundary, Entity principle, designed to
 
 
 <p align="center">
-  <img src="img/img_8.png" alt="img_7.png">
+  <img src="img/img_9.png" alt="img_7.png">
 </p>
 
 ### Key Features of RunTracker:

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Goal {
 
@@ -21,7 +22,14 @@ public class Goal {
                 @JsonProperty("desc") String desc,
                 @JsonProperty("status") String status){
         this.goalId = goalId;
+
+
         this.deadLine = deadLine;
+        if (!isValidDateFormat(deadLine)) {
+            this.deadLine = "";
+            throw new IllegalArgumentException("Invalid deadline format. Expected format: YYYY-MM-DD");
+        }
+
         this.totalCal = totalCal;
         this.desc = desc;
 
@@ -69,5 +77,14 @@ public class Goal {
     }
     public String getStatus() {
         return this.status;
+    }
+
+    private boolean isValidDateFormat(String date) {
+        try {
+            LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }

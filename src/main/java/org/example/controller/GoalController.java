@@ -204,6 +204,7 @@ public class GoalController {
             escapedMessage = escapedMessage.replace("\n", " ");
             ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or typee "+ escapedMessage +" \" \n}");
         }).then(goal -> {
+
             String validationError = validateGoal(goal);
             if (validationError != null) {
                 System.out.println("Data empty..");
@@ -375,11 +376,11 @@ public class GoalController {
         if (goal.getTotalCal() == 0) {
             return "Total Calories cannot be empty";
         }
-        if (goal.getDeadLine() == null || goal.getDeadLine().isEmpty()) {
-            return "Date cannot be empty";
-        }
         if (goal.getTotalCal() <= 0) {
             return "Total calories must be a positive integer";
+        }
+        if (goal.getDeadLine() == null || goal.getDeadLine().isEmpty()) {
+            return "Date cannot be empty";
         }
         return null;
     }

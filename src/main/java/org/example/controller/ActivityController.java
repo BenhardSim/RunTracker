@@ -43,13 +43,14 @@ public class ActivityController {
             escapedMessage = escapedMessage.replace("\n", " ");
             ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"message\": \"Failed to read activity: "+ escapedMessage +" \"}");
         }).then(querySnapshot -> {
+
             if (querySnapshot != null) {
                 // mapping data ke bentuk dictionary
                 List<Map<String, Object>> activities = querySnapshot.getDocuments().stream()
                         .map(QueryDocumentSnapshot::getData)
                         .collect(Collectors.toList());
 
-                // conver ke json dan kirim
+                // convert ke json dan kirim
                 ctx.render(json(activities));
             } else {
                 ctx.getResponse().status(Status.NOT_FOUND).contentType("application/json").send("{\"error\": \"Data not found\"}");
@@ -73,7 +74,7 @@ public class ActivityController {
         });
 
         promise.onError(throwable -> {
-            // Handle the errorz
+            // Handle the error
             throwable.printStackTrace();
             String escapedMessage = throwable.toString().replace("\"", "\'");
             escapedMessage = escapedMessage.replace("\n", " ");
@@ -93,7 +94,7 @@ public class ActivityController {
         // berfungsi untuk mengambil data dari database secara async
         ApiFuture<QuerySnapshot> future = db.collection("activities").get();
 
-        // mengambilData dari ApiFuture dan membuat menjadi promise
+        // mengambil Data dari ApiFuture dan membuat menjadi promise
         Promise<QuerySnapshot> promise = Blocking.get(() -> {
             try {
                 return future.get();

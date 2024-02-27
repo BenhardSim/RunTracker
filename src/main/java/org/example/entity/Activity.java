@@ -3,6 +3,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Activity {
     private int activityId;
@@ -23,6 +25,12 @@ public class Activity {
                     @JsonProperty("avgHeartBeat") int avgHeartBeat){
         this.activityId = activityId;
         this.date = date;
+
+        if (!isValidDateFormat(date)) {
+            this.date = "";
+            throw new IllegalArgumentException("Invalid date format. Expected format: YYYY-MM-DD");
+        }
+
         this.duration = duration;
         this.calories = calories;
         this.distance = distance;
@@ -74,6 +82,15 @@ public class Activity {
     }
     public int getAvgHeartBeat() {
         return this.avgHeartBeat;
+    }
+
+    private boolean isValidDateFormat(String date) {
+        try {
+            LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
 }
