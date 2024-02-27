@@ -6,6 +6,12 @@ By : Benhard Simanullang
 Embark on a personalized running journey with RunTracker, your all-in-one application for logging and enhancing your running activities. This app empowers you to effortlessly record your runs, and set ambitious goals over time.
 
 RunTracker is constructed with the Ratpack library for the back-end, featuring multiple endpoints that users can leverage for their individual development ([for more details, click here](#api-documentation)). Utilizing Firebase for the database, users are required to set up their own accounts for database usage. To facilitate swift deployment, the application also provides a straightforward user interface, allowing users to promptly utilize it upon execution.
+This application follows the Controller, Boundary, Entity principle, designed to be easy to read and support future development seamlessly. Bellow is the application architecture
+
+
+<p align="center">
+  <img src="img/img_8.png" alt="img_7.png">
+</p>
 
 ### Key Features of RunTracker:
 
