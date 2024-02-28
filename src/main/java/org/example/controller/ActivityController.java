@@ -148,60 +148,6 @@ public class ActivityController {
         });
     }
 
-//    public static void addActivity(Context ctx) {
-//        ctx.parse(Activity.class).onError(throwable -> {
-//            // Handle parsing errors
-//            String escapedMessage = throwable.toString().replace("\"", "\'");
-//            escapedMessage = escapedMessage.replace("\n", " ");
-//            ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \"Invalid data format or type "+ escapedMessage +" \" \n}");
-//
-//        }).then(activity -> {
-//
-//            String validationError = validateActivity(activity);
-//            if (validationError != null) {
-//                System.out.println("Data empty..");
-//                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
-//                return;
-//            }
-//
-//            Firestore db = getFirestore();
-//
-//            // mengirim data ke dalam database secara async
-//            ApiFuture<WriteResult> future = db.collection("activities").document(String.valueOf(activity.getActivityId())).set(activity);
-//
-//            Promise<WriteResult> promise = Blocking.get(() -> {
-//                try {
-//                    return future.get();
-//                } catch (Exception e) {
-//                    // Handle the exception
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//
-//            promise.onError(throwable -> {
-//                // Handle the error
-//                throwable.printStackTrace();
-//                String escapedMessage = throwable.toString().replace("\"", "\'");
-//                escapedMessage = escapedMessage.replace("\n", " ");
-//                ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).contentType("application/json").send("{\"message\": \"Failed to add activity: "+ escapedMessage +" \" \n}");
-//            })
-//            .then(writeResult -> {
-//                if (writeResult != null) {
-//                    Map<String, String> SuccesMsg = new HashMap<>();
-//                    SuccesMsg.put("status", "Success");
-//                    SuccesMsg.put("Message", "Activity added successfully");
-//                    ctx.render(json(SuccesMsg));
-//                } else {
-//                    // Handle the case where the operation did not succeed
-//                    ctx.getResponse().status(Status.INTERNAL_SERVER_ERROR).send("Failed to add activity: Operation was unsuccessful.");
-//                }
-//            });
-//
-//
-//
-//        });
-//    }
-
     public static void addActivity(Context ctx) {
         ctx.parse(Activity.class).onError(throwable -> {
             // Handle parsing errors
