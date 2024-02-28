@@ -8,6 +8,8 @@ import ratpack.core.http.Status;
 import ratpack.exec.Blocking;
 import ratpack.exec.Promise;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -313,6 +315,14 @@ public class ActivityController {
         if (activity.getDate() == null || activity.getDate().isEmpty()) {
             return "Date cannot be empty";
         }
+
+        // Add the condition to check if the date is in the future
+        LocalDate currentDate = LocalDate.now();
+        LocalDate activityDate = LocalDate.parse(activity.getDate(), DateTimeFormatter.ISO_LOCAL_DATE);
+        if (activityDate.isAfter(currentDate)) {
+            return "Date cannot be in the future";
+        }
+
         if (activity.getDistance() == 0) {
             return "Distance cannot be empty";
         }

@@ -206,6 +206,12 @@ public class GoalController {
         }).then(goal -> {
             Firestore db = getFirestore();
 
+            String validationError = validateGoal(goal);
+            if (validationError != null) {
+                ctx.getResponse().status(Status.BAD_REQUEST).contentType("application/json").send("{\"message\": \""+ validationError +" \" \n}");
+                return;
+            }
+
             // Check if goalId exists
             DocumentReference docRef = db.collection("goals").document(String.valueOf(goal.getGoalId()));
             ApiFuture<DocumentSnapshot> future = docRef.get();
@@ -381,6 +387,13 @@ public class GoalController {
         if (goal.getDeadLine() == null || goal.getDeadLine().isEmpty()) {
             return "Date cannot be empty";
         }
+        LocalDate currentDate = LocalDate.now();
+        LocalDate deadlineDate = LocalDate.parse(goal.getDeadLine(), DateTimeFormatter.ISO_LOCAL_DATE);
+        if (deadlineDate.isBefore(currentDate)) {
+            return "Deadline cannot be in the past";
+        }
+
+
         return null;
     }
 }
