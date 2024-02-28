@@ -170,7 +170,7 @@ response example
 ]
 ```
 **Description :**
-Retrieve all activities user has created before
+Retrieve all goals user has created before
 
 <BR>
 
@@ -212,19 +212,22 @@ response example
 ```
 **Description :**
 Retrieve an activity created by user based on the id 
+
+<br>
+
+#### RETRIEVING GOAL DATA BASED ON ID
+
 ```
 GET /goal/{goalId}
 ```
 response example
 ```
 {
-    "date": "2024-02-24",
-    "duration": 530,
-    "activityId": 110,
-    "distance": 4110,
-    "avgHeartBeat": 80,
-    "calories": 840,
-    "steps": 3104
+    "goalId": 107,
+    "totalCal": 400,
+    "deadLine": "2023-02-24",
+    "desc": "goals akhir tahun, harusss bisaa !!!",
+    "status": "Finish"
 }
 ```
 **Description :**
@@ -364,7 +367,6 @@ Editing activity data into database with a structure and datatype as follows
 #### DELETING ACTIVITY DATA
 ```
 DELETE /deleteactivity/{activityId}
-Content-Type: application/json
 ```
   response example
 ```
@@ -378,7 +380,6 @@ Content-Type: application/json
 #### DELETING GOAL DATA
 ```
 DELETE /deletegoal/{goalId}
-Content-Type: application/json
 ```
 response example
 ```
